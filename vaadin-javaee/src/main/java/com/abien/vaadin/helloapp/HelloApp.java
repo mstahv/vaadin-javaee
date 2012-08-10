@@ -23,6 +23,8 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
@@ -52,6 +54,21 @@ public class HelloApp extends Application {
         final TextField nameField = new TextField("Input something:");
         final Label greetingLbl = new Label();
         layout.addComponent(nameField);
+
+        layout.addComponent(new Button("Say slow Hello, clicking this shouldn't stall other users", new Button.ClickListener() {
+
+            @Override
+            public void buttonClick(ClickEvent event) {
+                try {
+                    Thread.sleep(20*1000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(HelloApp.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                getMainWindow().showNotification("Hello!");
+            }
+        }));
+
+        
         layout.addComponent(new Button("Say Hello", new Button.ClickListener() {
 
             @Override
